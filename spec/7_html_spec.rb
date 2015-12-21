@@ -41,10 +41,10 @@ describe "User - HTML Generator" do
     end
 
     it "generates an HMTL file that looks good" do
-     `open views/users/aaron-rusli.html`    ##spec asks to comment out before push 
-      sleep(1)    ##spec asks to comment out before push 
+#     `open views/users/aaron-rusli.html`    ##spec asks to comment out before push 
+#      sleep(1)    ##spec asks to comment out before push 
       expect("looks good").to eq("looks good")
-      puts "in spec/7_html_spec.rb, comment out the lines 'open views...' (#44) and 'sleep(1)' (#45), and this line (#47) before submitting a pull request"     ##spec asks to comment out before push 
+#      puts "in spec/7_html_spec.rb, comment out the lines 'open views...' (#44) and 'sleep(1)' (#45), and this line (#47) before submitting a pull request"     ##spec asks to comment out before push 
     end  
       
     it "lists the user's name in a header and displays their neopoints" do
