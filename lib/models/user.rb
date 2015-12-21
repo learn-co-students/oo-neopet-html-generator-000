@@ -91,33 +91,50 @@ class User
     end
   end
 
-  def items_rendering_method
-    @first_items_template, @second_items_template, @total_user_items = [], [], []
+  def helper_templates_method
+    @neopet_template, @user_items_template = [], [], [], []
     if @neopets.first
-      if @neopets.first.items
-        @neopets.first.items.each{|item|
-          mark_up = "<li><img src=\%..\/..\/public\/img\/items\/#{item.type}.jpg%><\/li><ul><li><strong>Type:<\/strong> #{item.format_type}<\/li><\/ul>"
-          @first_items_template << mark_up
-          @total_user_items <<  mark_up
-        }          
-      end
-      @first_items_template = @first_items_template.to_s[2..-3].gsub(/\"\, \"/, " ").gsub(/%/, "\"")
+        @neopets.each{|neopet|
+          @neopet_template << 
+            "<li><img src=%../../public/img/neopets/#{neopet.species}.jpg%><\/li>
+              <ul>
+                <li><strong>Name:<\/strong> #{neopet.name}<\/li>
+                <li><strong>Mood:<\/strong> #{neopet.mood}<\/li>
+                <li><strong>Species:<\/strong> #{neopet.species}<\/li>
+                <li><strong>Strength:<\/strong> #{neopet.strength}<\/li>
+                <li><strong>Defence:<\/strong> #{neopet.defence}<\/li>
+                <li><strong>Movement:<\/strong> #{neopet.movement}<\/li>"
+        if neopet.items
+            @neopet_template <<
+              "<li><strong>Items:<\/strong><\/li>
+                  <ul>"
+
+            neopet.items.each{|item| 
+              item_mark_up =
+                "<li><img src=%../../public/img/items/#{item.type}.jpg%></li>
+                  <ul>
+                    <li><strong>Type:</strong> #{item.format_type}</li>
+                  </ul>"
+              @neopet_template << item_mark_up
+              @user_items_template << item_mark_up
+              }
+
+            @neopet_template << 
+              "<\/ul>
+                <\/ul>"
+        end
+          }
     end
-    if @neopets.count > 1
-      if @neopets.last.items
-        @neopets.last.items.each{|item|
-          mark_up = "<li><img src=%..\/..\/public\/img/items\/#{item.type}.jpg%><\/li><ul><li><strong>Type:<\/strong> #{item.format_type}<\/li><\/ul>"
-          @second_items_template << mark_up
-          @total_user_items << mark_up        
-        }           
-      end
-      @second_items_template = @second_items_template.to_s[2..-3].gsub(/\"\, \"/, " ").gsub(/%/, "\"")
+  end
+
+  def template_to_mark_up(template)
+    if template
+      template.to_s[2..-3].gsub(/\"\, \"/, " ").gsub(/%/, "\"").gsub(/\\n/,"")
     end
-    @total_user_items = @total_user_items.to_s[2..-3].gsub(/\"\, \"/, " ").gsub(/%/, "\"")
   end
 
   def make_index_page
-    items_rendering_method
+    helper_templates_method
     template =
         "<!DOCTYPE html>
         <html>
@@ -138,60 +155,29 @@ class User
 
               <div class=\"row marketing\">
                 
-                <!-- begin listing neopets -->
-                <div class=\"col-lg-6\">
-                  <h3>Neopets<\/h3>
-                  <ul>
 
-                  #{if @neopets.first
+                  <div class=\"col-lg-6\">
+                    <h3>Neopets<\/h3>
+                    <ul>
 
-                    "<li><img src=\"../../public/img/neopets/#{@neopets.first.species}.jpg\"><\/li>
-                      <ul>
-                        <li><strong>Name:<\/strong> #{@neopets.first.name}<\/li>
-                        <li><strong>Mood:<\/strong> #{@neopets.first.mood}<\/li>
-                        <li><strong>Species:<\/strong> #{@neopets.first.species}<\/li>
-                        <li><strong>Strength:<\/strong> #{@neopets.first.strength}<\/li>
-                        <li><strong>Defence:<\/strong> #{@neopets.first.defence}<\/li>
-                        <li><strong>Movement:<\/strong> #{@neopets.first.movement}<\/li>
-                        <li><strong>Items:<\/strong><\/li>
-                          <ul>
-                          #{@first_items_template}
-                          <\/ul>
-                      <\/ul>"
+                    #{template_to_mark_up(@neopet_template)}
 
-                    end
-                  }
+                    <\/ul>
+                  <\/div>
 
-                  #{if @neopets.count > 1
+                  <div class=\"col-lg-6\">
+                    <h3>Items<\/h3>
+                    <ul>
 
-                    "<li><img src=\"../../public/img/neopets/#{@neopets.last.species}.jpg\"><\/li>
-                      <ul>
-                        <li><strong>Name:<\/strong> #{@neopets.last.name}<\/li>
-                        <li><strong>Mood:<\/strong> #{@neopets.last.mood}<\/li>
-                        <li><strong>Species:<\/strong> #{@neopets.last.species}<\/li>
-                        <li><strong>Strength:<\/strong> #{@neopets.last.strength}<\/li>
-                        <li><strong>Defence:<\/strong> #{@neopets.last.defence}<\/li>
-                        <li><strong>Movement:<\/strong> #{@neopets.last.movement}<\/li>
-                        <li><strong>Items:<\/strong><\/li>
-                          <ul>
-                          #{@second_items_template}
-                          <\/ul>
-                      <\/ul>"
-                    end
-                  }
+                      #{template_to_mark_up(@user_items_template)}
 
+                    <\/ul>
                   <\/ul>
                 <\/div>
 
-        <div class=\"col-lg-6\">
-          <h3>Items<\/h3>
-          <ul>
-
-            #{@total_user_items}
-
-          <\/ul>
-        <\/ul>
-      <\/div>"
+              </div><!-- end row marketing -->
+          </div><!-- end container -->
+        </body>"
         
     File.open("views/users/#{make_file_name_for_index_page}.html",'w+') {|f|
       f.write(template)
