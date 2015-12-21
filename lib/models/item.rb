@@ -14,4 +14,8 @@ class Item
     @type.split("_").map{|w| w.capitalize}.join(" ")
   end
 
+  def formatted_type
+    @type.split("_").map{|w| w.capitalize}.join(" ")
+  end
+
 end

@@ -113,10 +113,9 @@ class User
               item_mark_up =
                 "<li><img src=%../../public/img/items/#{item.type}.jpg%></li>
                   <ul>
-                    <li><strong>Type:</strong> #{item.format_type}</li>
+                    <li><strong>Type:<\/strong> #{item.formatted_type}</li>
                   </ul>"
               @neopet_template << item_mark_up
-              @user_items_template << item_mark_up
               }
 
             @neopet_template << 
@@ -124,6 +123,16 @@ class User
                 <\/ul>"
         end
           }
+    end
+    if @items
+      @items.each{|item|
+        item_mark_up =
+          "<li><img src=%../../public/img/items/#{item.type}.jpg%></li>
+              <ul>
+                <li><strong>Type:<\/strong> #{item.formatted_type}</li>
+              </ul>"
+        @user_items_template << item_mark_up
+      }
     end
   end
 
