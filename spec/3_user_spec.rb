@@ -53,13 +53,13 @@ describe "User" do
     end
   end
 
-  describe "#select_pet_name" do
-    it "uses the PET_NAMES array to choose a unique pet name" do
-      modified_names = ["Angel", "Baby", "Bailey", "Bella", "Buddy", "Charlie", "Chloe", "Coco", "Lily", "Lucy", "Maggie", "Max", "Molly", "Oliver", "Shadow", "Sophie", "Sunny", "Tiger"]
-      modified_names.each {|n| mandy.neopets << Neopet.new(n)}
-      expect(mandy.select_pet_name).to satisfy {|s| ["Daisy","Rocky","Bandit"].include?(s) }
-    end
-  end
+  # describe "#select_pet_name" do
+  #   it "uses the PET_NAMES array to choose a unique pet name" do
+  #     modified_names = ["Angel", "Baby", "Bailey", "Bella", "Buddy", "Charlie", "Chloe", "Coco", "Lily", "Lucy", "Maggie", "Max", "Molly", "Oliver", "Shadow", "Sophie", "Sunny", "Tiger"]
+  #     modified_names.each {|n| mandy.neopets << Neopet.new(n)}
+  #     expect(mandy.select_pet_name).to satisfy {|s| ["Daisy","Rocky","Bandit"].include?(s) }
+  #   end
+  # end
 
   describe "#make_file_name_for_index_page" do
     it "replaces spaces in the user's name with dashes" do
